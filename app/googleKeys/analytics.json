@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "analytics-sitesmacedo",
+  "private_key_id": "76581dee16a229ae1466bd390e8cb56d1e3a9920",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDYY2lKS32dC4r0\nZQ0GJYtDfUOLbnU3SEbUaHY0+8diUa2Uq3+eSk/8EBNL3ldeQqbaCogsWayoZe7f\nGzVDEFKVnT1IeNBesmqABgI17r+kSMkfhYyxpH3PzFAxKAqbG2IbE3MTLZq+D5w2\nhhOOa9n9RAyxf3J7BwzqrMjKmFmkDWfcbPsiw49wtvEpIDAb19j/V5SwgT75t+0N\nnSEWxNnd63q/9kJ6YeH/SzNhkRYEbzWQoOJznRSRJCAAHpKs/AV6ImqyTYk4neCr\nkPOmK/Hqo+X9VvHe5cwQ1w9v9Bx++wahOvE2B5FELmeRb228jU2hfLmO7qSPgWVf\nKb0PZDLNAgMBAAECggEAAaHWVHoh9hef3QdkxBbFEyWUZy6BHIFOD3duP34QBfIp\nxgT5JHTZCkSwxedlGfqUuZukuqOT2tKnV5rOmbU7ejzCY+k4C87QC4Eqw8S2QK36\niQ3/1AMynmj4czZ4cK0R3gm/2iAuRPVnLz4ZqFRbQ5QffbiWtiOFJGwDOQv8eRv2\njlgGXdaJUDnrmlyhc8Qr4NI9/96oaJv25FXUGHl4a6fE+kKVk4o0orq2FQ1qzajf\npbN50bAzxRb7ySIJb9wYfPXJhRCduXF+4nWNoSuYFVmT4e0reFMLXtdUTwMo0Oxb\nsANJpPHSTxnqM/IfH/KSZjQ6rk7fJJq95mFbD617nQKBgQD2Xy4irHWKCPRfSaxh\nk/RJ1304ldFnpzMnOJN6PRXxe99uaRQzI7DJ7/9VKidkWvOrDxwTHTk0r2zbWXOM\nvQCOzq4qNJ9YERJutycQ8kBWyDl1eYPRdBsmNzQlByGaiBpDd/kvvBF7ZApRH5UA\n4Aeue3oY01RHrdulv5mczJv7OwKBgQDg2EMjc5fTS4Be+b4hh5DiXSGSxI2Ef2FM\nUq3wOxhDHhuaDDEIisOleMMTVYkvoxcWjQVRPNS0kyCh+tPP9b+OSkwgodxkOFkK\nv+HQB7MG4Vb8QE1Poe/refxt8aSBk4eLjpl0BV9BEkIjouH77h0tgYUwxHdCZWsk\nBtTyU2rZlwKBgHzk/VdYg/Fo3rEbgQaqYXG5iuJPmKtqKFVeqeyS4PfdKwQmwrW2\nBx4nyxGaYAPQ06vI6huKegCKWa3M5/XVrl22yrXcnVaguO5lbKl7lUApGm/CHR/m\nMwkpfQa0WcWj72R6glk/hsE9krlTQE8EQwCh2eCR6Sy5JxscSTwiwYQXAoGBAMK/\nDgfayxocPygEMIZiIT+vYrD4xYqJugCdbEKzLKSVo1qeTKoVZrggDPbmE1jLbef+\nZSikA6gT9yPVWTi6phvchmuNRpMXqygAYtoIkSvYabs7Brt+i4vtsJKZxd7lpXVf\nIdK4BHUcF2U+Y3YOG/+aO36t7I35wf8GW9M4JUgpAoGBAIbTxR40H2Z66MpwAmSK\nDjsCtZWMMTSIJaqJT0zF8IJba75JDjZhws39fw8GOK9mpqpz3HKJAvs632TFKmsp\nGJ3kq3tM2sLkC+PHkw/anV6uEt5keJ/R7Kbd+sgSnXDOxB5M7Tb+6pqKZLoJBtAm\nk7eXbmIxaLffnuEbWRJbF8OB\n-----END PRIVATE KEY-----\n",
+  "client_email": "analytics@analytics-sitesmacedo.iam.gserviceaccount.com",
+  "client_id": "102417836406161286344",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/analytics%40analytics-sitesmacedo.iam.gserviceaccount.com"
+}
