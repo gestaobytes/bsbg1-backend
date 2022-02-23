@@ -173,13 +173,13 @@ class PostRepository implements PostInterface
     {
         $post = $this->model->select('slug')->where('id',$id)->first();
 
-        $dataForm = array('image_credit' => $request['image_credit']!= '' ? $request['image_credit'] : null);
-        $legendForm = array('image_subtitle' => $request['image_subtitle']);
-        $credit =  Str::slug($request['image_credit'], '-');
-        $legend =  Str::slug($request['image_subtitle'], '-');
+        // $dataForm = array('image_credit' => $request['image_credit']!= '' ? $request['image_credit'] : null);
+        // $legendForm = array('image_subtitle' => $request['image_subtitle']);
+        // $credit =  Str::slug($request['image_credit'], '-');
+        // $legend =  Str::slug($request['image_subtitle'], '-');
+        // $dataForm = array_merge($dataForm, $legendForm);
 
         $nameImage = $post->slug . "_" . date('YmdHis');
-        $dataForm = array_merge($dataForm, $legendForm);
 
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
@@ -203,12 +203,9 @@ class PostRepository implements PostInterface
             $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
             $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
 
-            $image = array('image' => "$nameImage.jpg");
-            $dataForm = array_merge($dataForm, $image);
-        } else {
-            $image = array('image' => "$post->image");
-            $dataForm = array_merge($dataForm, $image);
+            $dataForm = array('image' => "$nameImage.jpg");
         }
+
 
         return $this->model->where('id', $id)->update($dataForm);
     }
