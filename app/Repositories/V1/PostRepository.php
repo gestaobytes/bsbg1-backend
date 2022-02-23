@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Interfaces\v1\PostInterface;
 use Illuminate\Support\Facades\Storage;
+/** cast */
 
 class PostRepository implements PostInterface
 {
