@@ -171,6 +171,7 @@ class PostRepository implements PostInterface
 
     public function image(int $id, Request $request)
     {
+        $dataForm = $request->all();
         $post = $this->model->select('slug')->where('id',$id)->first();
 
         // $dataForm = array('image_credit' => $request['image_credit']!= '' ? $request['image_credit'] : null);
@@ -180,6 +181,7 @@ class PostRepository implements PostInterface
         // $dataForm = array_merge($dataForm, $legendForm);
 
         $nameImage = $post->slug . "_" . date('YmdHis');
+        dd($dataForm);
 
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
@@ -200,8 +202,8 @@ class PostRepository implements PostInterface
                 $constraint->aspectRatio();
             });
 
-            $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
-            $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
+            // $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
+            // $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
 
             $dataForm = array('image' => "$nameImage.jpg");
         }
