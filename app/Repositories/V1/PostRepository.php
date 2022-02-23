@@ -173,16 +173,15 @@ class PostRepository implements PostInterface
     {
         $post = $this->model->select('slug')->where($id)->first();
 
-        $dataForm = array('image_credit' => $request['image_credit']);
-        // $legendForm = array('image_subtitle' => $request['image_subtitle']);
-        // $credit =  Str::slug($request['image_credit'], '-');
-        // $legend =  Str::slug($request['image_subtitle'], '-');
+        $dataForm = array('image_credit' => $request['image_credit']!= '' ? $request['image_credit'] : null);
+        $legendForm = array('image_subtitle' => $request['image_subtitle']);
+        $credit =  Str::slug($request['image_credit'], '-');
+        $legend =  Str::slug($request['image_subtitle'], '-');
 
         // $nameImage = $post . "-foto:" . $credit . "_" . date('YmdHis');
         $nameImage = $post->slug . "_" . date('YmdHis');
-        // $dataForm = array_merge($dataForm, $legendForm);
+        $dataForm = array_merge($dataForm, $legendForm);
 
-        dd($dataForm);
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
             unset($request['image']);
@@ -202,8 +201,8 @@ class PostRepository implements PostInterface
                 $constraint->aspectRatio();
             });
 
-            $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
-            $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
+            // $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
+            // $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
 
             $image = array('image' => "$nameImage.jpg");
             $dataForm = array_merge($dataForm, $image);
@@ -211,6 +210,8 @@ class PostRepository implements PostInterface
             $image = array('image' => "$post->image");
             $dataForm = array_merge($dataForm, $image);
         }
+
+        dd($dataForm);
 
 
         return $this->model->where('id', $id)->update($dataForm);
