@@ -173,12 +173,13 @@ class PostRepository implements PostInterface
     {
         $post = $this->model->select('slug')->first($id);
         $dataForm = array('image_credit' => $request['image_credit']);
-        $legendForm = array('image_subtitle' => $request['image_subtitle']);
-        $credit =  Str::slug($request['image_credit'], '-');
-        $legend =  Str::slug($request['image_subtitle'], '-');
+        // $legendForm = array('image_subtitle' => $request['image_subtitle']);
+        // $credit =  Str::slug($request['image_credit'], '-');
+        // $legend =  Str::slug($request['image_subtitle'], '-');
+
         // $nameImage = $post . "-foto:" . $credit . "_" . date('YmdHis');
         $nameImage = $post->slug . "_" . date('YmdHis');
-        $dataForm = array_merge($dataForm, $legendForm);
+        // $dataForm = array_merge($dataForm, $legendForm);
 
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
