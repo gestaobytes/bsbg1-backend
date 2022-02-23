@@ -181,7 +181,7 @@ class PostRepository implements PostInterface
         // $dataForm = array_merge($dataForm, $legendForm);
 
         $nameImage = $post->slug . "_" . date('YmdHis');
-        dd($dataForm);
+
 
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
