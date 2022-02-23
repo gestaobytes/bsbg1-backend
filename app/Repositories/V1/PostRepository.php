@@ -171,22 +171,18 @@ class PostRepository implements PostInterface
 
     public function image(int $id, Request $request)
     {
-        $dataForm = $request->all();
-        $post = $this->model->select('slug')->where('id',$id)->first();
-
-        // $dataForm = array('image_credit' => $request['image_credit']!= '' ? $request['image_credit'] : null);
-        // $legendForm = array('image_subtitle' => $request['image_subtitle']);
-        // $credit =  Str::slug($request['image_credit'], '-');
-        // $legend =  Str::slug($request['image_subtitle'], '-');
-        // $dataForm = array_merge($dataForm, $legendForm);
-
+        $post = $this->model->select('slug')->first($id);
+        $dataForm = array('image_credit' => $request['image_credit']);
+        $legendForm = array('image_subtitle' => $request['image_subtitle']);
+        $credit =  Str::slug($request['image_credit'], '-');
+        $legend =  Str::slug($request['image_subtitle'], '-');
+        // $nameImage = $post . "-foto:" . $credit . "_" . date('YmdHis');
         $nameImage = $post->slug . "_" . date('YmdHis');
-
+        $dataForm = array_merge($dataForm, $legendForm);
 
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
             unset($request['image']);
-            unset($dataForm['image']);
 
             $imageInfo = explode(";base64,", $img);
             $extension = str_replace('data:image/', '', $imageInfo[0]);
@@ -207,9 +203,11 @@ class PostRepository implements PostInterface
             $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
 
             $image = array('image' => "$nameImage.jpg");
-            array_merge($dataForm, $image);
+            $dataForm = array_merge($dataForm, $image);
+        } else {
+            $image = array('image' => "$post->image");
+            $dataForm = array_merge($dataForm, $image);
         }
-
 
         return $this->model->where('id', $id)->update($dataForm);
     }
