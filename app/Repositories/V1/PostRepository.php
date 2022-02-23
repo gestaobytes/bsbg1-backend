@@ -186,6 +186,7 @@ class PostRepository implements PostInterface
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
             unset($request['image']);
+            unset($dataForm['image']);
 
             $imageInfo = explode(";base64,", $img);
             $extension = str_replace('data:image/', '', $imageInfo[0]);
@@ -202,10 +203,11 @@ class PostRepository implements PostInterface
                 $constraint->aspectRatio();
             });
 
-            // $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
-            // $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
+            $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
+            $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
 
-            $dataForm = array('image' => "$nameImage.jpg");
+            $image = array('image' => "$nameImage.jpg");
+            array_merge($dataForm, $image);
         }
 
 
