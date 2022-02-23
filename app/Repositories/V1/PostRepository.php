@@ -203,8 +203,8 @@ class PostRepository implements PostInterface
                 $constraint->aspectRatio();
             });
 
-            // $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
-            // $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
+            $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
+            $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
 
             $image = array('image' => "$nameImage.jpg");
             array_merge($dataForm, $image);
