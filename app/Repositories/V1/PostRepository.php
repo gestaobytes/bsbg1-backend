@@ -171,7 +171,7 @@ class PostRepository implements PostInterface
 
     public function image(int $id, Request $request)
     {
-        $post = $this->model->select('slug')->find($id)->first();
+        $post = $this->model->select('slug')->where('id',$id)->first();
         dd($post);
 
         $dataForm = array('image_credit' => $request['image_credit']!= '' ? $request['image_credit'] : null);
