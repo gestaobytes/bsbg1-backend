@@ -210,6 +210,8 @@ class PostRepository implements PostInterface
             $dataForm = array_merge($dataForm, $image);
         }
 
+        dd($dataForm);
+
         return $this->model->where('id', $id)->update($dataForm);
     }
 
