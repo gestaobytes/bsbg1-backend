@@ -171,6 +171,7 @@ class PostRepository implements PostInterface
 
     public function image(int $id, Request $request)
     {
+        dd($id);
         $post = $this->model->select('slug')->first($id);
         $dataForm = array('image_credit' => $request['image_credit']);
         // $legendForm = array('image_subtitle' => $request['image_subtitle']);
@@ -181,6 +182,7 @@ class PostRepository implements PostInterface
         $nameImage = $post->slug . "_" . date('YmdHis');
         // $dataForm = array_merge($dataForm, $legendForm);
 
+        dd($dataForm);
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
             unset($request['image']);
@@ -210,7 +212,6 @@ class PostRepository implements PostInterface
             $dataForm = array_merge($dataForm, $image);
         }
 
-        dd($dataForm);
 
         return $this->model->where('id', $id)->update($dataForm);
     }
