@@ -178,12 +178,8 @@ class PostRepository implements PostInterface
         $credit =  Str::slug($request['image_credit'], '-');
         $legend =  Str::slug($request['image_subtitle'], '-');
 
-        // $nameImage = $post . "-foto:" . $credit . "_" . date('YmdHis');
         $nameImage = $post->slug . "_" . date('YmdHis');
         $dataForm = array_merge($dataForm, $legendForm);
-
-
-
 
         if (isset($request['image']) && $request['image'] != "") {
             $img = $request['image'];
@@ -204,8 +200,8 @@ class PostRepository implements PostInterface
                 $constraint->aspectRatio();
             });
 
-            // $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
-            // $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
+            $image->save(Storage::disk('gcs')->put("photos/$nameImage.jpg", "$image"));
+            $thumb->save(Storage::disk('gcs')->put("thumbs/$nameImage.jpg", "$thumb"));
 
             $image = array('image' => "$nameImage.jpg");
             $dataForm = array_merge($dataForm, $image);
@@ -213,9 +209,6 @@ class PostRepository implements PostInterface
             $image = array('image' => "$post->image");
             $dataForm = array_merge($dataForm, $image);
         }
-
-        dd($dataForm);
-
 
         return $this->model->where('id', $id)->update($dataForm);
     }
