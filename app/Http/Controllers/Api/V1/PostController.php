@@ -32,31 +32,31 @@ class PostController extends Controller
 
     public function show(int $id)
     {
-        $this->commons->userAuthorization($this->gate);
+        // $this->commons->userAuthorization($this->gate);
         return $this->service->show($id);
     }
 
     public function details(int $id)
     {
-        $this->commons->userAuthorization($this->gate);
+        // $this->commons->userAuthorization($this->gate);
         return $this->service->details($id);
     }
 
     public function store(Request $request)
     {
-        $this->commons->userAuthorization($this->gate);
+        // $this->commons->userAuthorization($this->gate);
         return $this->service->store($request);
     }
 
     public function update(int $id, Request $request)
     {
-        $this->commons->userAuthorization($this->gate);
+        // $this->commons->userAuthorization($this->gate);
         return $this->service->update($id, $request);
     }
 
     public function image(int $id, Request $request)
     {
-        $this->commons->userAuthorization($this->gate);
+        // $this->commons->userAuthorization($this->gate);
         return $this->service->image($id, $request);
     }
 
