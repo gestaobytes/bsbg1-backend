@@ -108,7 +108,8 @@ class PostRepository implements PostInterface
     public function store(Request $request)
     {
         $dataForm = $request->all();
-        $user_id = array('user_id' => Auth::user()->id) ? array('user_id' => Auth::user()->id) : array('user_id' => 1);
+        // $user_id = array('user_id' => Auth::user()->id) ? array('user_id' => Auth::user()->id) : array('user_id' => 1);
+        $user_id = array('user_id' => 2);
         $dataForm = array_merge($dataForm, $user_id);
 
         /** texto */
