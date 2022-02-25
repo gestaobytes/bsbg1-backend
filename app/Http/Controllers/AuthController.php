@@ -4,44 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Mail\AuthEmail;
 use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Support\Arr;
 use App\Models\Role;
+use App\Models\Layout;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use App\Mail\RegisterUser;
 
 
 class AuthController extends Controller
 {
 
     protected $jwt;
+    private $user, $request;
 
-    public function __construct(JWTAuth $jwt)
+    public function __construct(JWTAuth $jwt, User $user, Request $request)
     {
         $this->jwt = $jwt;
-        $this->middleware('auth:api', ['except' => ['login', 'validateToken', 'register']]);
+        $this->user = $user;
+        $this->request = $request;
+        $this->middleware('auth:api', ['except' => ['login', 'validateToken', 'register', 'resetPassword']]);
     }
 
-    public function register(Request $request)
+    public function resetPassword(Request $request)
     {
+
         $rules = [
-            'name' => 'required|min:4|max:60',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|min:6',
+            'email' => 'required|email|max:255',
         ];
 
         $messages = [
-            'name.required' => 'Nome eh obrigatorio',
-            'name.min' => 'Nome deve ter no minimo 6 caracteres',
-            'name.max' => 'Nome deve ter no maximo 60 caracteres',
             'email.required' => 'O campo E-mail e obrigatorio',
             'email.email' => 'Insira um e-mail valido',
-            'email.unique' => 'Este e-mail ja esta em uso',
-            'password.required' => 'O campo Senha eh obrigatorio',
             'email.max' => 'E-mail deve ter no maximo 255 caracteres',
-            'password.min' => 'A Senha deve ter no minimo 6 caracteres',
         ];
 
         $validator = validator($request->all(), $rules, $messages);
@@ -50,79 +52,90 @@ class AuthController extends Controller
             return $validator->errors();
         }
 
-        $type = (!isset($request->type) || $request->type == '') ? 'C' : $request->type;
+        $verifyUser = User::where('email', $request->email)->first();
 
 
-        $user = User::create([
-            'email' => $request->email,
-            'name' => $request->name,
-            'password' => bcrypt($request->password),
-            'type' => $type
-        ]);
-        
-        $roleId = 3;
-        $role = DB::insert('insert into role_user (user_id, role_id) values (?, ?)', [$user->id, $roleId]);
+        if ($verifyUser != null) {
 
+            $company = 'Prefeitura de Porto Nacional';
+            $email = 'contato@portonacional.to.gov.br';
 
-        if ($user && $role) {
-            DB::commit();
-            // $dados = array(
-            //     'email' => "$user->email",
-            //     'name' => "$user->name",
-            // );
-            // Mail::send('restrito.wellcome.index', $dados, function ($message) use ($dados) {
-            //     $message->to($dados['email'])->subject('Seja Bem Vindo!');
-            // });
+            $str = '@!*-%$0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuWwVvXxYyzz';
+            $mix = str_shuffle($str);
+            $pass = substr($mix, 4, 8);
+
+            $password = ['password' => $pass];
+
+            $company = [
+                'name' => $company,
+                'email' => $email,
+                'domain' => 'portonacional.to.gov.br',
+            ];
+
+            $update = $this->user->where('id', $verifyUser->id)->update(['password' => bcrypt($pass)]);
+
+            // if($update){
+            //     Mail::to($request->email)->send(new RegisterUser($company, $verifyUser, $password));
+            // }
+
         } else {
-            DB::rollBack();
+            return ['error' => 'O e-mail informado nao esta cadastrado'];
         }
     }
 
+
     public function login(Request $request)
     {
+
         $this->validate(
             $request,
             [
-                'email'    => 'required|email|max:255',
+                'email' => 'required|email|max:255',
                 'password' => 'required|min:6',
             ],
             [
-                'email.required' => 'E-MAIL: campo obrigatório',
-                'email.email' => 'E-MAIL: insira um e-mail válido',
-                'password.required' => 'SENHA: campo obrigatório',
-                'email.max' => 'E-MAIL: máximo de 255 caracteres',
-                'password.min' => 'SENHA: mínimo de 6 caracteres',
+                'email.required' => 'O campo E-mail e obrigatorio',
+                'email.email' => 'Insira um e-mail valido',
+                'email.max' => 'E-mail deve ter no maximo 255 caracteres',
+                'password.required' => 'O campo Senha e obrigatorio',
+                'password.min' => 'A Senha deve ter no minimo 6 caracteres',
             ]
         );
 
         $credentials = $request->only('email', 'password');
+
+
         if (!$token = $this->jwt->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $userLog = Auth::user();
+
         $user = Auth::user()
             ->select('users.id', 'users.name', 'users.email')
             ->where('id', $userLog->id)
             ->with('roles:roles.id,roles.name')
             ->first();
 
-        // if ($user->status != "ON") {
-        //     return response()->json(['message' => 'Usuário bloqueado.']);
-        // }
 
         $idsRoles = Arr::pluck($user->roles, 'id');
         $permissions = Role::select('roles.id', 'roles.name')
             ->whereIn('roles.id', $idsRoles)
             ->with('permissions:permissions.id,permissions.name')
             ->first();
-        $idsPermissions = Arr::pluck($permissions->permissions, 'id');
-        $permissions = Permission::select('name')
-            ->whereIn('id', $idsPermissions)
-            ->get();
-        $permissions = Arr::pluck($permissions, 'name');
+        if ($permissions != null) {
+            $idsPermissions = Arr::pluck($permissions->permissions, 'id');
+            $permissions = Permission::select('name')
+                ->whereIn('id', $idsPermissions)
+                ->get();
+            $permissions = Arr::pluck($permissions, 'name');
+        } else {
+            $permissions = [];
+        }
 
-        $expires_in = auth()->factory()->getTTL() * 60;
+        // $expires_in = auth()->factory()->getTTL() * 60;
+        $dateNow = Carbon::now();
+        $expires_in = Carbon::parse($dateNow)->addMinutes(60)->format('Y-m-d H:i:s');
         $type = 3600;
 
         return response()->json(compact('token', 'type', 'expires_in', 'user', 'permissions'));
@@ -173,7 +186,6 @@ class AuthController extends Controller
         return $this->respondWithToken(auth()->refresh());
     }
 
-
     protected function respondWithToken($token)
     {
         return response()->json([
@@ -182,8 +194,6 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
-
-
 
     public function validateToken(Request $request)
     {
